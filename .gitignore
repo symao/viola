@@ -1,0 +1,9 @@
+build/
+lib/
+*~
+*.orig
+*.obj
+*.so
+*.a
+.vscode/
+doxygen
