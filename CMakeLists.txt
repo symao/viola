@@ -2,9 +2,9 @@ cmake_minimum_required(VERSION 3.1)
 project(viola)
 
 set(BUILD_TEST 1)
-set(BUILD_GTEST 1)
+set(BUILD_GTEST 0)
 set(BUILD_G2O 0)
-set(BUILD_APRILTAG 1)
+set(BUILD_APRILTAG 0)
 set(ENABLE_CERES 0)
 
 set(CMAKE_CXX_FLAGS "-std=c++11 -O3 -Werror -Wall")
