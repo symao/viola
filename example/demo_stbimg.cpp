@@ -67,7 +67,7 @@ void testImwrite(const cv::Mat& img, int img_format) {
 }
 
 int main() {
-  const char* fpng = "/home/symao/workspace/viola/data/snow.png";
+  const char* fpng = "/home/symao/workspace/vs_common/data/snow.png";
   const char* fjpg = "/home/symao/Pictures/2DMarker/logo/starbucks.jpg";
   testImread(fpng);
   testImread(fpng, cv::IMREAD_GRAYSCALE);

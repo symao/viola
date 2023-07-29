@@ -68,7 +68,8 @@ void makedirs(const char* path) {
   size_t t = -1;
   std::string s(path);
   while ((t = s.find_first_of("\\/", t + 1)) != s.npos) {
-    const char* sub_path = s.substr(0, t).c_str();
+    std::string str = s.substr(0, t);
+    const char* sub_path = str.c_str();
     if (!exists(sub_path)) mkdir(sub_path, S_IRWXU | S_IRWXG | S_IRWXO);
   }
   if (!exists(path)) mkdir(path, S_IRWXU | S_IRWXG | S_IRWXO);
@@ -105,15 +106,13 @@ void rmtree(const char* path) {
 void move(const char* src, const char* dst) {
   char cmd[512] = {0};
   snprintf(cmd, sizeof(cmd), "mv %s %s", src, dst);
-  int res = system(cmd);
-  res = res;
+  system(cmd);
 }
 
 void copytree(const char* src, const char* dst) {
   char cmd[512] = {0};
   snprintf(cmd, sizeof(cmd), "cp -r %s %s", src, dst);
-  int res = system(cmd);
-  res = res;
+  system(cmd);
 }
 
 uint64_t filesize(const char* file) {

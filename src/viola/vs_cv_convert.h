@@ -82,13 +82,19 @@ inline cv::Mat camMat(double fx, double fy, double cx, double cy) {
 inline Eigen::Vector2d cvt2d(const cv::Point2f& a) { return Eigen::Vector2d(a.x, a.y); }
 
 /** @brief convert 2d point, eigen to cv */
-inline cv::Point2f cvt2d(const Eigen::Vector2d& a) { return cv::Point2f(a(0), a(1)); }
+template <typename T>
+cv::Point2f cvt2d(const Eigen::Matrix<T, 2, 1>& a) {
+  return cv::Point2f(a(0), a(1));
+}
 
 /** @brief convert 3d point, cv to eigen */
 inline Eigen::Vector3d cvt3d(const cv::Point3f& a) { return Eigen::Vector3d(a.x, a.y, a.z); }
 
 /** @brief convert 3d point, eigen to cv */
-inline cv::Point3f cvt3d(const Eigen::Vector3d& a) { return cv::Point3f(a(0), a(1), a(2)); }
+template <typename T>
+cv::Point3f cvt3d(const Eigen::Matrix<T, 3, 1>& a) {
+  return cv::Point3f(a(0), a(1), a(2));
+}
 
 /** @brief convert matrix, cv to eigen */
 inline Eigen::MatrixXd cvtMat(const cv::Mat& a) {
@@ -98,25 +104,27 @@ inline Eigen::MatrixXd cvtMat(const cv::Mat& a) {
 }
 
 /** @brief convert matrix, eigen to cv */
-inline cv::Mat cvtMat(const Eigen::MatrixXd& a) {
+template <typename _Scalar, int _Rows, int _Cols>
+inline cv::Mat cvtMat(const Eigen::Matrix<_Scalar, _Rows, _Cols>& a) {
   cv::Mat cv_mat;
   eigen2cv(a, cv_mat);
   return cv_mat;
 }
 
-/** @brief construct Eigen::Isometry3d transformation with input quaternion and translation */
-inline Eigen::Isometry3d isom(double qw, double qx, double qy, double qz, double tx, double ty, double tz) {
-  Eigen::Isometry3d T = Eigen::Isometry3d::Identity();
-  T.linear() = Eigen::Quaterniond(qw, qx, qy, qz).toRotationMatrix();
-  T.translation() << tx, ty, tz;
-  return T;
+/** @brief construct Eigen::Isometry3 transformation with input quaternion and translation */
+template <typename T>
+Eigen::Transform<T, 3, Eigen::Isometry> isom(T qw, T qx, T qy, T qz, T tx, T ty, T tz) {
+  Eigen::Transform<T, 3, Eigen::Isometry> isom = Eigen::Transform<T, 3, Eigen::Isometry>::Identity();
+  isom.linear() = Eigen::Quaternion<T>(qw, qx, qy, qz).toRotationMatrix();
+  isom.translation() << tx, ty, tz;
+  return isom;
 }
 
 /** @brief construct Eigen::Isometry3d 4x4 tramsformation matrix in row major */
-inline Eigen::Isometry3d isom(double m00, double m01, double m02, double m03, double m10, double m11, double m12,
-                              double m13, double m20, double m21, double m22, double m23, double m30 = 0,
-                              double m31 = 0, double m32 = 0, double m33 = 1) {
-  Eigen::Isometry3d isom;
+template <typename T>
+Eigen::Transform<T, 3, Eigen::Isometry> isom(T m00, T m01, T m02, T m03, T m10, T m11, T m12, T m13, T m20, T m21,
+                                             T m22, T m23, T m30 = 0, T m31 = 0, T m32 = 0, T m33 = 1) {
+  Eigen::Transform<T, 3, Eigen::Isometry> isom;
   isom.matrix() << m00, m01, m02, m03, m10, m11, m12, m13, m20, m21, m22, m23, m30, m31, m32, m33;
   return isom;
 }
@@ -149,11 +157,12 @@ inline void isom2rt(const Eigen::Isometry3d& T, cv::Mat& rvec, cv::Mat& tvec) {
 }
 
 /** @brief convert Eigen::Isometry3d transformation to cv::Affine3f */
-inline cv::Affine3f isom2affine(const Eigen::Isometry3d& isom) {
-  cv::Mat T;
-  eigen2cv(isom.matrix(), T);
-  T.convertTo(T, CV_32FC1);
-  return cv::Affine3f(T);
+template <typename T>
+cv::Affine3f isom2affine(const Eigen::Transform<T, 3, Eigen::Isometry>& isom) {
+  cv::Mat m;
+  eigen2cv(isom.matrix(), m);
+  m.convertTo(m, CV_32FC1);
+  return cv::Affine3f(m);
 }
 
 /** @brief convert data vector(size is 16) to 4x4 transformation */
@@ -171,7 +180,8 @@ inline Eigen::Isometry3d vec2isom(const std::vector<double>& v, bool row_major =
 }
 
 /** @brief convert mat to string for print */
-inline std::string mat2str(const Eigen::MatrixXd& mat, int buf_len = 1024) {
+template <typename T>
+std::string mat2str(const Eigen::Matrix<T, -1, -1>& mat, int buf_len = 1024) {
   char* buf = new char[buf_len];
   int idx = 0;
   idx += snprintf(buf + idx, buf_len - idx, "%dx%d [", static_cast<int>(mat.rows()), static_cast<int>(mat.cols()));
@@ -196,12 +206,13 @@ inline std::string mat2str(const Eigen::MatrixXd& mat, int buf_len = 1024) {
  * @param[in]mode: 0-4x4 matrix  1-pose+quat  2-pose+angleaxis
  * @return std::string
  */
-inline std::string isom2str(const Eigen::Isometry3d& isom, int mode = 0) {
+template <typename T>
+std::string isom2str(const Eigen::Transform<T, 3, Eigen::Isometry>& isom, int mode = 0) {
   if (mode == 0) {
-    return mat2str(isom.matrix());
+    return mat2str<T>(isom.matrix());
   } else if (mode == 1) {
     const auto& p = isom.translation();
-    Eigen::Quaterniond q(isom.linear());
+    Eigen::Quaternion<T> q(isom.linear());
     char* buf = new char[1024];
     snprintf(buf, 1024, "pos:(%.3f, %.3f, %.3f) quat_wxyz:(%.3f, %.3f, %.3f, %.3f)", p.x(), p.y(), p.z(), q.w(), q.x(),
              q.y(), q.z());
@@ -210,7 +221,7 @@ inline std::string isom2str(const Eigen::Isometry3d& isom, int mode = 0) {
     return str;
   } else if (mode == 2) {
     const auto& p = isom.translation();
-    Eigen::AngleAxisd angleaxis(isom.linear());
+    Eigen::AngleAxis<T> angleaxis(isom.linear());
     auto r = angleaxis.axis() * angleaxis.angle();
     char* buf = new char[1024];
     snprintf(buf, 1024, "pos:(%.3f, %.3f, %.3f) rvec:(%.3f, %.3f, %.3f)", p.x(), p.y(), p.z(), r.x(), r.y(), r.z());

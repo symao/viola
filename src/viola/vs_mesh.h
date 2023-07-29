@@ -5,37 +5,54 @@
  * @details 3D mesh data
  */
 #pragma once
+#include <vector>
 #include <opencv2/core.hpp>
 #if ENABLE_CV_VIZ
 #include <opencv2/viz.hpp>
 #endif  // ENABLE_CV_VIZ
 
 namespace vs {
+template <typename T>
+std::vector<int> toVizPoly(const std::vector<std::vector<T>>& polys) {
+  std::vector<int> res;
+  for (const auto& poly : polys) {
+    res.push_back(poly.size());
+    for (const auto& i : poly) res.push_back(i);
+  }
+  return res;
+}
 
 struct MeshData {
-  std::vector<cv::Point3f> vertices;       ///< vertice coordinate
-  std::vector<std::vector<int>> polygons;  ///< face polygons
-  std::vector<cv::Vec3b> colors;           ///< vertice color
-  std::vector<cv::Vec3f> normals;          ///< vertice normal vector
+  using Vertex = cv::Point3f;
+  using VertexList = std::vector<Vertex>;
+  using Color = cv::Vec3b;
+  using ColorList = std::vector<Color>;
+  using Normal = cv::Vec3f;
+  using NormalList = std::vector<Normal>;
+  using IndexType = size_t;
+  using Polygon = std::vector<IndexType>;
+  using PolygonList = std::vector<Polygon>;
+
+  VertexList vertices;   ///< vertice coordinate
+  PolygonList polygons;  ///< face polygons
+  ColorList colors;      ///< vertice color in B-G-R order
+  NormalList normals;    ///< vertice normal vector
 
   bool readObj(const char* file);
 
-  bool writeObj(const char* file);
+  bool writeObj(const char* file) const;
 
   bool readPly(const char* file);
 
-  bool writePly(const char* file);
+  bool writePly(const char* file) const;
 
 #if ENABLE_CV_VIZ
-  cv::viz::WMesh toVizMesh() { return cv::viz::WMesh(vertices, toVizPoly(polygons), colors, normals); }
+  cv::viz::WMesh toVizMesh() const { return cv::viz::WMesh(vertices, toVizPoly(polygons), colors, normals); }
 
-  cv::viz::WCloud toVizCloud() {
+  cv::viz::WCloud toVizCloud() const {
     return colors.empty() ? cv::viz::WCloud(vertices) : cv::viz::WCloud(vertices, colors);
   }
 #endif  // ENABLE_CV_VIZ
-
-  /** @brief convert polygons index to cv::viz::WSphere input params */
-  static std::vector<int> toVizPoly(const std::vector<std::vector<int>>& polys);
 };
 
 }  // namespace vs

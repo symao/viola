@@ -70,10 +70,8 @@ std::string VioDataLoader::name() const {
       return "DatasetTUM";
     case DATASET_ZJU_VIO:
       return "DatasetZJU";
-    case DATASET_VS_COMMON:
-      return "DatasetVsCommon";
-    case DATASET_XRING:
-      return "DatasetXRing";
+    case DATASET_VIOLA:
+      return "DatasetViola";
   }
   return "UnknowDatasetType";
 }
@@ -103,8 +101,12 @@ VioDataLoader::MessageType VioDataLoader::nextType() {
     readNextGtPose(m_next_gt_pose);
     // if IMU data valid, drop all data before the first IMU ts
     if (m_next_imu.ts >= 0) {
-      while (m_next_cam.ts < m_next_imu.ts) readNextCamera(m_next_cam);
-      while (m_next_gt_pose.ts < m_next_imu.ts) readNextGtPose(m_next_gt_pose);
+      if (m_next_cam.ts >= 0) {
+        while (m_next_cam.ts < m_next_imu.ts) readNextCamera(m_next_cam);
+      }
+      if (m_next_gt_pose.ts >= 0) {
+        while (m_next_gt_pose.ts < m_next_imu.ts) readNextGtPose(m_next_gt_pose);
+      }
     }
     m_next_type = checkNextType();
   }
@@ -525,9 +527,9 @@ bool VioDataLoaderKitti::readNextGtPose(PoseData& gt_pose) {
   return true;
 }
 
-class VioDataLoaderVsCommon : public VioDataLoader {
+class VioDataLoaderViola : public VioDataLoader {
  public:
-  explicit VioDataLoaderVsCommon(bool split_lr = false) : m_split_lr(split_lr) { m_dataset_type = DATASET_VS_COMMON; }
+  explicit VioDataLoaderViola(bool split_lr = false) : m_split_lr(split_lr) { m_dataset_type = DATASET_VIOLA; }
 
  protected:
   virtual bool initImpl(const std::string& data_dir, const std::vector<std::string>& append_files);
@@ -547,7 +549,7 @@ class VioDataLoaderVsCommon : public VioDataLoader {
   std::ifstream m_fin_imu;
 };
 
-bool VioDataLoaderVsCommon::initImpl(const std::string& data_dir, const std::vector<std::string>& append_files) {
+bool VioDataLoaderViola::initImpl(const std::string& data_dir, const std::vector<std::string>& append_files) {
   m_datadir = data_dir;
   std::string video_file = join(m_datadir, "img.avi");
   std::string img_file = join(m_datadir, "imgts.txt");
@@ -570,7 +572,7 @@ bool VioDataLoaderVsCommon::initImpl(const std::string& data_dir, const std::vec
   return true;
 }
 
-bool VioDataLoaderVsCommon::readNextImu(ImuData& imu) {
+bool VioDataLoaderViola::readNextImu(ImuData& imu) {
   imu.ts = -1;
   std::string line;
   while (getline(m_fin_imu, line)) {
@@ -585,7 +587,7 @@ bool VioDataLoaderVsCommon::readNextImu(ImuData& imu) {
   return false;
 }
 
-bool VioDataLoaderVsCommon::readNextCamera(CameraData& cam) {
+bool VioDataLoaderViola::readNextCamera(CameraData& cam) {
   cam.ts = -1;
   cam.imgs.clear();
   cam.imgs.reserve(m_mono ? 1 : 2);
@@ -613,7 +615,7 @@ bool VioDataLoaderVsCommon::readNextCamera(CameraData& cam) {
   return true;
 }
 
-bool VioDataLoaderVsCommon::readNextGtPose(PoseData& gt_pose) {
+bool VioDataLoaderViola::readNextGtPose(PoseData& gt_pose) {
   gt_pose.ts = -1;
   std::string line;
   while (getline(m_fin_imu, line)) {
@@ -628,33 +630,6 @@ bool VioDataLoaderVsCommon::readNextGtPose(PoseData& gt_pose) {
   return false;
 }
 
-class VioDataLoaderXRing : public VioDataLoaderEuroc {
- public:
-  VioDataLoaderXRing() {
-    m_dataset_type = DATASET_XRING;
-    m_fimu = "mav0/imu0/data.csv";
-    m_fimg = "mav0/cam0/data.csv";
-    m_fgt = "apriltag_pose.txt";
-  }
-
- protected:
-  virtual void parseImgLine(const char* line_str, ImgFileInfo& a) {
-    m_mono = true;
-    VioDataLoaderEuroc::parseImgLine(line_str, a);
-  }
-
-  virtual void parseImuLine(const char* line_str, ImuData& imu) {
-    SAFE_SSCANF(line_str, "%lf %lf %lf %lf %lf %lf %lf", &imu.ts, &imu.acc[0], &imu.acc[1], &imu.acc[2], &imu.gyro[0],
-                &imu.gyro[1], &imu.gyro[2]);
-    imu.ts /= 1e6;
-  }
-
-  virtual void parseGtLine(const char* line_str, PoseData& a) {
-    SAFE_SSCANF(line_str, "%lf %lf %lf %lf %lf %lf %lf %lf", &a.ts, &a.tx, &a.ty, &a.tz, &a.qx, &a.qy, &a.qz, &a.qw);
-    a.ts /= 1e9;
-  }
-};
-
 std::shared_ptr<VioDataLoader> createVioDataLoader(VioDataLoader::DatasetType dataset_type) {
   switch (dataset_type) {
     case VioDataLoader::DATASET_EUROC:
@@ -667,10 +642,8 @@ std::shared_ptr<VioDataLoader> createVioDataLoader(VioDataLoader::DatasetType da
       return std::make_shared<VioDataLoaderTumVi>();
     case VioDataLoader::DATASET_ZJU_VIO:
       return std::make_shared<VioDataLoaderZjuViSlam>();
-    case VioDataLoader::DATASET_VS_COMMON:
-      return std::make_shared<VioDataLoaderVsCommon>();
-    case VioDataLoader::DATASET_XRING:
-      return std::make_shared<VioDataLoaderXRing>();
+    case VioDataLoader::DATASET_VIOLA:
+      return std::make_shared<VioDataLoaderViola>();
     default:
       break;
   }
@@ -692,7 +665,7 @@ std::shared_ptr<VioDataLoader> createVioDataLoader(const std::string& data_dir, 
     if (ptr->init(data_dir, append_files)) return ptr;
     ptr = std::make_shared<VioDataLoaderZjuViSlam>();
     if (ptr->init(data_dir, append_files)) return ptr;
-    ptr = std::make_shared<VioDataLoaderVsCommon>();
+    ptr = std::make_shared<VioDataLoaderViola>();
     if (ptr->init(data_dir, append_files)) return ptr;
   } else {
     auto ptr = createVioDataLoader(dataset_type);

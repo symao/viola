@@ -53,60 +53,60 @@ This repo is a treasure chest for **SLAM/AR/VIO/Robotics** researchers.
 ## Headers Summary
 |Filename|Need Eigen|Need OpenCV|Details|
 |--|--|--|--|
-|[vs_align.h](./src/vs_common/vs_align.h)||√|pixel align using direct method in VSLAM|
-|[vs_argparse.h](./src/vs_common/vs_argparse.h)|||A modified version of https://github.com/tanakh/cmdline|
-|[vs_basic.h](./src/vs_common/vs_basic.h)|||macros, numerics utils, vector utils, string utils|
-|[vs_calib.h](./src/vs_common/vs_calib.h)|√|√|mono/stereo calibration data structure, camera-odometry hand-eye calibration.|
-|[vs_cam_cap.h](./src/vs_common/vs_cam_cap.h)||√|camera capture using opencv, capture image with rolling buffer in real-time, auto save video.|
-|[vs_color_adjust.h](./src/vs_common/vs_color_adjust.h)||√|Adjust image color style to reference image style, such as: histogram matching, color statistic matching.|
-|[vs_color_filter.h](./src/vs_common/vs_color_filter.h)||√|label image to mask with specific color such as:red, yellow, white.|
-|[viola.h](./src/vs_common/viola.h)|√|√||
-|[vs_cv_convert.h](./src/vs_common/vs_cv_convert.h)||√|data convertion between Eigen and opencv.|
-|[vs_cv_io.h](./src/vs_common/vs_cv_io.h)||√|file I/O for OpenCV mat|
-|[vs_data.h](./src/vs_common/vs_data.h)|||useful data structure(FIFO, FILO, max heap, circular queue), atom/locked data buffer, sychronized time buffer, median/mean/exponetial filter, asynchronized data saver.|
-|[vs_data_recorder.h](./src/vs_common/vs_data_recorder.h)||√|general data recorder for image (into video or file) and string content (into file), asynchronized.|
-|[vs_debug_draw.h](./src/vs_common/vs_debug_draw.h)||√|draw keypoints, feature tracking, mask, camera pose in 2D image with OpenCV. image hstack/vstack/gridstack.|
-|[vs_eigen_io.h](./src/vs_common/vs_eigen_io.h)|√||file I/O for Eigen dense/sparse matrix.|
-|[vs_encrypt.h](./src/vs_common/vs_encrypt.h)|||string content encrypting/decrypting.|
-|[vs_fbx.h](./src/vs_common/vs_fbx.h)|√||wrapper of fbxsdk for fbx reading/writing.|
-|[vs_feature.h](./src/vs_common/vs_feature.h)||√|detect and track 2D point feature between consecutive frames.|
-|[vs_feature_line.h](./src/vs_common/vs_feature_line.h)||√|detect and track 2D line feature between consecutive frames|
-|[vs_g2o_solver.h](./src/vs_common/vs_g2o_solver.h)|√|√|g2o wrapper for PnP, Graph-SLAM.|
-|[vs_geometry2d.h](./src/vs_common/vs_geometry2d.h)||√|geometry for 2D point, line, rect.|
-|[vs_geometry3d.h](./src/vs_common/vs_geometry3d.h)|√||geometry for 3D transformation and 6 DoF pose.|
-|[vs_gridmap.h](./src/vs_common/vs_gridmap.h)|||2D/3D grid map buffer|
-|[vs_improc.h](./src/vs_common/vs_improc.h)||√|color conversion, region filter, alpha blending, histogram matching|
-|[vs_imsaver.h](./src/vs_common/vs_imsaver.h)||√|save image file in an asynchronous manner|
-|[vs_imtrans.h](./src/vs_common/vs_imtrans.h)||√|universal image transformation for image processing|
-|[vs_imu.h](./src/vs_common/vs_imu.h)|√|√|IMU numerical integration, pre-integration, ZUPT trigger.|
-|[vs_json.h](./src/vs_common/vs_json.h)|||wrapper for json11|
-|[vs_kdtree.h](./src/vs_common/vs_kdtree.h)|||implemention of KD-tree and nereast search.|
-|[vs_lane_detect.h](./src/vs_common/vs_lane_detect.h)||√|detect lane with specific color.|
-|[vs_line_match.h](./src/vs_common/vs_line_match.h)|√|√|2D line segment matching and alignment|
-|[vs_logger.h](./src/vs_common/vs_logger.h)|||a lightweight logger which output message to screen, file as well as user callbacks.|
-|[vs_mapping.h](./src/vs_common/vs_mapping.h)|||2D/3D grid mapping using rolling buffer, local map is used for obstacle avoidance|
-|[vs_mesh.h](./src/vs_common/vs_mesh.h)||√|3D mesh data|
-|[vs_os.h](./src/vs_common/vs_os.h)|||cpu handle, file utils, path utils which is similar to os.path in python.|
-|[vs_panorama.h](./src/vs_common/vs_panorama.h)||√|convert equirectangular panorama image to perspective local view with camera intrinsic and extrinsic.|
-|[vs_perf.h](./src/vs_common/vs_perf.h)|||performance evaluation for algorithms time cost.|
-|[vs_pf.h](./src/vs_common/vs_pf.h)|||a template particle filter with importance/weighted resampling.|
-|[vs_plot.h](./src/vs_common/vs_plot.h)||√|s simple 2D plot lib implemented by OpenCV, Similar usage to Matlab or matplotlib.pyplot in python.|
-|[vs_pnp.h](./src/vs_common/vs_pnp.h)||√|perspective-n-points algorithms, closed form for translation-only pnp, pnl, as well as 4-Dof pnp, pnl.|
-|[vs_random.h](./src/vs_common/vs_random.h)|||random generator and sampling. Similar to numpy.random in python|
-|[vs_raycast.h](./src/vs_common/vs_raycast.h)|||2D/3D line voxel tracersal using Bresenham's algorithm|
-|[vs_rot.h](./src/vs_common/vs_rot.h)|||conversion between quaternion(w, x, y, z), eular(yaw, pitch, roll) and rotation matrix|
-|[vs_sfm.h](./src/vs_common/vs_sfm.h)|√|√|Structure-from-motion in vision initialization|
-|[vs_stb_image.h](./src/vs_common/vs_stb_image.h)||√|Image reading/writing using stb_image api, same use as cv::imread/cv::imwrite.|
-|[vs_tag.h](./src/vs_common/vs_tag.h)||√|detect 2D tags in image, support chessboard, apriltag, ARUCO.|
-|[vs_tictoc.h](./src/vs_common/vs_tictoc.h)|||evaluate the time cost.|
-|[vs_tracking.h](./src/vs_common/vs_tracking.h)||√|2D boundingbox tracking based on point features.|
-|[vs_triangulate.h](./src/vs_common/vs_triangulate.h)|√||two-view/multi-view triangulation|
-|[vs_video_saver.h](./src/vs_common/vs_video_saver.h)||√|save video in an asynchronous manner.|
-|[vs_vio_data_loader.h](./src/vs_common/vs_vio_data_loader.h)|√|√|VIO dataset loader for EuROC, KITTI, TUM-VIO, UZH-VIO as well as inner format.|
-|[vs_vio_data_saver.h](./src/vs_common/vs_vio_data_saver.h)||√|Recorder VIO data in inner format.|
-|[vs_vio_type.h](./src/vs_common/vs_vio_type.h)||√|common data structure in VIO|
-|[vs_viz3d.h](./src/vs_common/vs_viz3d.h)||√|3D visulization based on cv::Viz in an asynchronous manner.|
-|[vs_yaml_parser.h](./src/vs_common/vs_yaml_parser.h)||√|param reader and writer of file in Yaml format, based on opencv.|
+|[vs_align.h](./src/viola/vs_align.h)||√|pixel align using direct method in VSLAM|
+|[vs_argparse.h](./src/viola/vs_argparse.h)|||A modified version of https://github.com/tanakh/cmdline|
+|[vs_basic.h](./src/viola/vs_basic.h)|||macros, numerics utils, vector utils, string utils|
+|[vs_calib.h](./src/viola/vs_calib.h)|√|√|mono/stereo calibration data structure, camera-odometry hand-eye calibration.|
+|[vs_cam_cap.h](./src/viola/vs_cam_cap.h)||√|camera capture using opencv, capture image with rolling buffer in real-time, auto save video.|
+|[vs_color_adjust.h](./src/viola/vs_color_adjust.h)||√|Adjust image color style to reference image style, such as: histogram matching, color statistic matching.|
+|[vs_color_filter.h](./src/viola/vs_color_filter.h)||√|label image to mask with specific color such as:red, yellow, white.|
+|[viola.h](./src/viola/viola.h)|√|√||
+|[vs_cv_convert.h](./src/viola/vs_cv_convert.h)||√|data convertion between Eigen and opencv.|
+|[vs_cv_io.h](./src/viola/vs_cv_io.h)||√|file I/O for OpenCV mat|
+|[vs_data.h](./src/viola/vs_data.h)|||useful data structure(FIFO, FILO, max heap, circular queue), atom/locked data buffer, sychronized time buffer, median/mean/exponetial filter, asynchronized data saver.|
+|[vs_data_recorder.h](./src/viola/vs_data_recorder.h)||√|general data recorder for image (into video or file) and string content (into file), asynchronized.|
+|[vs_debug_draw.h](./src/viola/vs_debug_draw.h)||√|draw keypoints, feature tracking, mask, camera pose in 2D image with OpenCV. image hstack/vstack/gridstack.|
+|[vs_eigen_io.h](./src/viola/vs_eigen_io.h)|√||file I/O for Eigen dense/sparse matrix.|
+|[vs_encrypt.h](./src/viola/vs_encrypt.h)|||string content encrypting/decrypting.|
+|[vs_fbx.h](./src/viola/vs_fbx.h)|√||wrapper of fbxsdk for fbx reading/writing.|
+|[vs_feature.h](./src/viola/vs_feature.h)||√|detect and track 2D point feature between consecutive frames.|
+|[vs_feature_line.h](./src/viola/vs_feature_line.h)||√|detect and track 2D line feature between consecutive frames|
+|[vs_g2o_solver.h](./src/viola/vs_g2o_solver.h)|√|√|g2o wrapper for PnP, Graph-SLAM.|
+|[vs_geometry2d.h](./src/viola/vs_geometry2d.h)||√|geometry for 2D point, line, rect.|
+|[vs_geometry3d.h](./src/viola/vs_geometry3d.h)|√||geometry for 3D transformation and 6 DoF pose.|
+|[vs_gridmap.h](./src/viola/vs_gridmap.h)|||2D/3D grid map buffer|
+|[vs_improc.h](./src/viola/vs_improc.h)||√|color conversion, region filter, alpha blending, histogram matching|
+|[vs_imsaver.h](./src/viola/vs_imsaver.h)||√|save image file in an asynchronous manner|
+|[vs_imtrans.h](./src/viola/vs_imtrans.h)||√|universal image transformation for image processing|
+|[vs_imu.h](./src/viola/vs_imu.h)|√|√|IMU numerical integration, pre-integration, ZUPT trigger.|
+|[vs_json.h](./src/viola/vs_json.h)|||wrapper for json11|
+|[vs_kdtree.h](./src/viola/vs_kdtree.h)|||implemention of KD-tree and nereast search.|
+|[vs_lane_detect.h](./src/viola/vs_lane_detect.h)||√|detect lane with specific color.|
+|[vs_line_match.h](./src/viola/vs_line_match.h)|√|√|2D line segment matching and alignment|
+|[vs_logger.h](./src/viola/vs_logger.h)|||a lightweight logger which output message to screen, file as well as user callbacks.|
+|[vs_mapping.h](./src/viola/vs_mapping.h)|||2D/3D grid mapping using rolling buffer, local map is used for obstacle avoidance|
+|[vs_mesh.h](./src/viola/vs_mesh.h)||√|3D mesh data|
+|[vs_os.h](./src/viola/vs_os.h)|||cpu handle, file utils, path utils which is similar to os.path in python.|
+|[vs_panorama.h](./src/viola/vs_panorama.h)||√|convert equirectangular panorama image to perspective local view with camera intrinsic and extrinsic.|
+|[vs_perf.h](./src/viola/vs_perf.h)|||performance evaluation for algorithms time cost.|
+|[vs_pf.h](./src/viola/vs_pf.h)|||a template particle filter with importance/weighted resampling.|
+|[vs_plot.h](./src/viola/vs_plot.h)||√|s simple 2D plot lib implemented by OpenCV, Similar usage to Matlab or matplotlib.pyplot in python.|
+|[vs_pnp.h](./src/viola/vs_pnp.h)||√|perspective-n-points algorithms, closed form for translation-only pnp, pnl, as well as 4-Dof pnp, pnl.|
+|[vs_random.h](./src/viola/vs_random.h)|||random generator and sampling. Similar to numpy.random in python|
+|[vs_raycast.h](./src/viola/vs_raycast.h)|||2D/3D line voxel tracersal using Bresenham's algorithm|
+|[vs_rot.h](./src/viola/vs_rot.h)|||conversion between quaternion(w, x, y, z), eular(yaw, pitch, roll) and rotation matrix|
+|[vs_sfm.h](./src/viola/vs_sfm.h)|√|√|Structure-from-motion in vision initialization|
+|[vs_stb_image.h](./src/viola/vs_stb_image.h)||√|Image reading/writing using stb_image api, same use as cv::imread/cv::imwrite.|
+|[vs_tag.h](./src/viola/vs_tag.h)||√|detect 2D tags in image, support chessboard, apriltag, ARUCO.|
+|[vs_tictoc.h](./src/viola/vs_tictoc.h)|||evaluate the time cost.|
+|[vs_tracking.h](./src/viola/vs_tracking.h)||√|2D boundingbox tracking based on point features.|
+|[vs_triangulate.h](./src/viola/vs_triangulate.h)|√||two-view/multi-view triangulation|
+|[vs_video_saver.h](./src/viola/vs_video_saver.h)||√|save video in an asynchronous manner.|
+|[vs_vio_data_loader.h](./src/viola/vs_vio_data_loader.h)|√|√|VIO dataset loader for EuROC, KITTI, TUM-VIO, UZH-VIO as well as inner format.|
+|[vs_vio_data_saver.h](./src/viola/vs_vio_data_saver.h)||√|Recorder VIO data in inner format.|
+|[vs_vio_type.h](./src/viola/vs_vio_type.h)||√|common data structure in VIO|
+|[vs_viz3d.h](./src/viola/vs_viz3d.h)||√|3D visulization based on cv::Viz in an asynchronous manner.|
+|[vs_yaml_parser.h](./src/viola/vs_yaml_parser.h)||√|param reader and writer of file in Yaml format, based on opencv.|
 
 ## Demos
 

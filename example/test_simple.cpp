@@ -30,7 +30,7 @@ void testypr() {
   Eigen::Matrix3d R_c_b;
   R_c_b << -0.6081574621585628, -0.4210112961753338, 0.6729739888833909, -0.7936767583288918, 0.3065860409203642,
       -0.5254352508171864, 0.01488974510861129, -0.8536711826022607, -0.5205994693476541;
-  std::cout << "rpy: " << Rbw2rpy(R_c_b * typicalRot(ROT_FLU2RDF)).transpose() * 57.29578 << std::endl;
+  std::cout << "rpy: " << Rbw2rpy<double>(R_c_b * typicalRot<double>(ROT_FLU2RDF)).transpose() * 57.29578 << std::endl;
   // auto ypr = R.eulerAngles(2, 1, 0);
   // std::cout << "ypr: " << ypr.transpose()*57.29578 << std::endl;
   // auto R2 = (Eigen::AngleAxisd(ypr(0), Eigen::Vector3d::UnitZ()) * Eigen::AngleAxisd(ypr(1),
@@ -417,7 +417,7 @@ void testColorHist() {
   double g_dhistmaxvalue;
   minMaxLoc(dsthist, 0, &g_dhistmaxvalue, 0, 0);
   for (int i = 0; i < 256; i++) {
-    //这里的dsthist.at<float>(i)就是每个bins对应的纵轴的高度
+    // 这里的dsthist.at<float>(i)就是每个bins对应的纵轴的高度
     int value = cvRound(256 * 0.9 * (dsthist.at<float>(i) / g_dhistmaxvalue));
     line(b_drawImage, Point(i, b_drawImage.rows - 1), Point(i, b_drawImage.rows - 1 - value), Scalar(255, 0, 0));
   }
@@ -795,7 +795,8 @@ void testPCA() {
   Eigen::MatrixXd data(6, 2);
   data << 0, 1, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10;
 
-  Eigen::MatrixXd eig_val, eig_coef, center;
+  Eigen::VectorXd eig_val, center;
+  Eigen::MatrixXd eig_coef;
   bool ok = PCA(data, eig_val, eig_coef, center);
   std::cout << "ok:" << ok << std::endl;
   std::cout << "eig_val:" << eig_val.transpose() << std::endl;
@@ -1331,7 +1332,7 @@ void testTriangulation() {
   // 2. triangulate with multiple view
   triangulateMultiViews(cam_poses, uvs, pos_multi_view);
   // 3. triangulate with linear solver
-  LinearTriangulator lt;
+  LinearTriangulator<double> lt;
   for (size_t i = 0; i < cam_poses.size(); i++) {
     lt.update(uvs[i].x(), uvs[i].y(), cam_poses[i]);
   }
@@ -1369,9 +1370,9 @@ void testGuidedFilter() {
 }
 
 void testImmerge() {
-  cv::Mat fg_img = cv::imread("/home/symao/workspace/viola//data/messi.png");
-  cv::Mat fg_mask = cv::imread("/home/symao/workspace/viola//data/messi_mask.png", cv::IMREAD_GRAYSCALE);
-  cv::Mat bg_img = cv::imread("/home/symao/workspace/viola/data/snow.png");
+  cv::Mat fg_img = cv::imread("/home/symao/workspace/vs_common//data/messi.png");
+  cv::Mat fg_mask = cv::imread("/home/symao/workspace/vs_common//data/messi_mask.png", cv::IMREAD_GRAYSCALE);
+  cv::Mat bg_img = cv::imread("/home/symao/workspace/vs_common/data/snow.png");
 
   bg_img = resizeMaxLength(bg_img, 960);
   imageComposition(bg_img, {fg_img, fg_img}, {fg_mask, fg_mask});
@@ -1398,7 +1399,7 @@ void testConvexToEllipse() {
 }
 
 void testPanorama() {
-  cv::Mat img = cv::imread("/home/symao/workspace/viola/data/panorama.jpg");
+  cv::Mat img = cv::imread("/home/symao/workspace/vs_common/data/panorama.jpg");
   for (float theta = 0; theta < 360; theta += 10) {
     // for (float phi = 0; phi < 360; phi += 10) {
     float phi = 0;
@@ -1622,7 +1623,7 @@ void testUmeyamaAlign() {
           .toRotationMatrix();
   transform.translation() << 0.1, 0.2, 0.3;
 
-  double gt_scale = 0.5;
+  double gt_scale = 0.77;
   std::vector<Eigen::Vector3d> tar_pts;
   for (const auto& p : src_pts) tar_pts.push_back(transform * p * gt_scale);
 
@@ -1630,9 +1631,8 @@ void testUmeyamaAlign() {
   double scale = 0;
   bool ok = umeyamaAlign(src_pts, tar_pts, estimate_transform, &scale);
 
-  printf("ok:%d scale:%.5f\n", ok, scale);
-  std::cout << "gt_transform:" << transform.matrix() << std::endl;
-  std::cout << "estimate_transform:" << estimate_transform.matrix() << std::endl;
+  printf("ok:%d\ngt_scale:%.5f  gt_pose:[%s]\nest_scale:%.5f est_pose:[%s]\n", ok, gt_scale,
+         isom2str(transform, 1).c_str(), scale, isom2str(estimate_transform, 1).c_str());
 }
 
 void testTimelinePloter() {
@@ -1646,6 +1646,10 @@ void testTimelinePloter() {
     static WaitKeyHandler handler;
     handler.waitKey();
   }
+}
+
+void testTqdm() {
+  for (auto i : tqdm(range(100))) msleep(100);
 }
 
 int main(int argc, char** argv) {
@@ -1693,7 +1697,6 @@ int main(int argc, char** argv) {
   // testDataRecorder();
   // testSearchSorted();
   // testHistMatching();
-  // testYuv();
   // testTriangulation();
   // testGuidedFilter();
   // testImmerge();
@@ -1707,5 +1710,6 @@ int main(int argc, char** argv) {
   // testEncrypt();
   // testLinspace();
   // testUmeyamaAlign();
-  testTimelinePloter();
+  // testTimelinePloter();
+  // testTqdm();
 }

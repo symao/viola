@@ -11,6 +11,7 @@
 #include <thread>
 #include <mutex>
 #include "vs_tictoc.h"
+#include "vs_basic.h"
 
 namespace vs {
 /** @brief 3D visualization using cv::viz::Viz3d in asynchronized thread */
@@ -45,6 +46,26 @@ class Viz3D {
   void updateWidget(const std::string& id, const cv::viz::Widget& w) {
     m_mtx.lock();
     m_widget_table[id] = w;
+    m_mtx.unlock();
+  }
+
+  cv::viz::Viz3d& getViz() { return m_viz; }
+
+  void removeWidget(const std::string& id, bool fuzzy_match = false) {
+    m_mtx.lock();
+    if (fuzzy_match) {
+      for (auto it = m_widget_table.begin(); it != m_widget_table.end();) {
+        if (vs::has(it->first, id)) {
+          m_viz.removeWidget(it->first);
+          it = m_widget_table.erase(it);
+        } else {
+          ++it;
+        }
+      }
+    } else {
+      m_widget_table.erase(id);
+      m_viz.removeWidget(id);
+    }
     m_mtx.unlock();
   }
 

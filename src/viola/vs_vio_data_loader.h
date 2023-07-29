@@ -60,8 +60,7 @@ class VioDataLoader {
     DATASET_UZH_VIO = 3,     ///< The UZH-FPV Drone Racing Dataset: https://fpv.ifi.uzh.ch/
     DATASET_TUM_VIO = 4,     ///< The TUM VI Benchmark: https://vision.in.tum.de/data/datasets/visual-inertial-dataset
     DATASET_ZJU_VIO = 5,     ///< ZJU-SenseTime VISLAM Benchmark: http://www.zjucvg.net/eval-vislam/
-    DATASET_VS_COMMON = 99,  ///< Dataset format of shuyuanmao123@gmail.com
-    DATASET_XRING = 98,      ///< Dataset format of XRing from dongxuan
+    DATASET_VIOLA = 99,  ///< Dataset format of shuyuanmao123@gmail.com
   };
 
   /** @brief sensor message type */
@@ -85,7 +84,7 @@ class VioDataLoader {
    *  |DATASET_UZH_VIO| imu.txt | left_images.txt | / |
    *  |DATASET_TUM_VIO| mav0/imu0/data.csv | mav0/cam0/data.csv | mav0/mocap0/data.csv |
    *  |DATASET_ZJU_VIO| imu/data.csv | camera/data.csv | groundtruth/data.csv |
-   *  |DATASET_VS_COMMON| imu_meta.txt | imgts.txt, img.avi | / |
+   *  |DATASET_VIOLA| imu_meta.txt | imgts.txt, img.avi | / |
    * @return whether init success
    */
   bool init(const std::string& data_dir, const std::vector<std::string>& append_files = {});

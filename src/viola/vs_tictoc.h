@@ -156,4 +156,20 @@ class TsSleeper {
   vs::Timer timer_;     ///< inner timer which starts in init
 };
 
+class TimeIt {
+ public:
+  TimeIt(const char* name = "") : name_(name) { timer_.start(); }
+
+  ~TimeIt() {
+    timer_.stop();
+    printf("[%s]cost %.2f ms\n", name_.c_str(), timer_.getMsec());
+  }
+
+ private:
+  Timer timer_;
+  std::string name_;
+};
+
+#define VS_TIME_IT() vs::TimeIt vs_time_it(__func__)
+
 } /* namespace vs */

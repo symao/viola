@@ -340,7 +340,7 @@ class KDTreeInnerImpl {
   bool ok() { return root; }
 
   friend class KDTreeNode;
-  friend class SearchRecord;
+  friend struct SearchRecord;
 
  private:
   KDTreeNode* root;                  ///< the root pointer

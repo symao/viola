@@ -8,7 +8,7 @@
 
 #include <memory.h>
 #include <stdint.h>
-
+#include <stdio.h>
 #include <algorithm>
 #include <cmath>
 #include <functional>
@@ -176,7 +176,7 @@ class GridMapping {
   const int UPPER, LOWER;
   const ValType m_max, m_inc, m_dec, m_thres;
   const int m_len, m_size, m_pos_size, m_idx_size;
-  int m_strides[D];       ///< stride of each dim
+  int m_strides[D];        ///< stride of each dim
   ValType* m_map;          ///< gridmap rolling buffer
   float m_origin[D];       ///< coordinate of origin point, which is (x_min, y_min)
   float m_res;             ///< resolution in meters of grid cell

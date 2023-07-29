@@ -52,6 +52,7 @@ cv::Rect maskRoi(const cv::Mat& mask);
  * @return merged image, which is img1*alpha1 + img2*(1-alpha1)
  */
 cv::Mat immerge(const cv::Mat& img1, const cv::Mat& img2, const cv::Mat& alpha1);
+cv::Mat immerge(const cv::Mat& img1, const cv::Mat& img2, float alpha1);
 
 /** @brief search the min max non-zero endpoint in input image by the input direction
  * @param[in]img: input one channel image in uint8_t
@@ -81,6 +82,7 @@ bool searchEndPointByDir(const cv::Mat& img, cv::Point2f& p1, cv::Point2f& p2, i
  *                   if CV_8UC1, multiply with 1.0f/255.0 to float alpha
  */
 void immergeInPlace(const cv::Mat& img1, cv::Mat& img2, const cv::Mat& alpha1);
+void immergeInPlace(const cv::Mat& img1, cv::Mat& img2, float alpha1);
 
 /** @brief image composition
  * @param[in,out]bg_img: background image

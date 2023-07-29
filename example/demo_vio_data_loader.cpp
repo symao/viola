@@ -189,7 +189,7 @@ int main(int argc, char** argv) {
                 0, false, {"/media/symao/My Passport/data/SLAM/KITTI/odometry/dataset/poses/00.txt"});
     // read own dataset
     playDataset("/media/symao/My Passport/data/VIO/sf_vio/AGV-西部兴围中转场/1/2019-08-16-14-56-30",
-                VioDataLoader::DATASET_VS_COMMON);
+                VioDataLoader::DATASET_VIOLA);
     // run data set in callback mode
     playDatasetWithCallback("/home/symao/data/euroc/zip/MH_04_difficult", VioDataLoader::DATASET_EUROC);
   }

@@ -12,6 +12,7 @@
 #include <thread>
 #include <vector>
 #include <numeric>
+#include <memory>
 
 #include "vs_basic.h"
 #include "vs_tictoc.h"

@@ -88,7 +88,7 @@ void testGridMapping3D() {
   auto f_pose = vs::join(tum_rgbd_dir, "groundtruth.txt");
   auto f_depth = vs::join(tum_rgbd_dir, "depth.txt");
   auto pose_data = vs::loadFileData(f_pose.c_str(), ' ');
-  vs::TimeBuffer<Eigen::Isometry3d> pose_buf(vs::isomLerp);
+  vs::TimeBuffer<Eigen::Isometry3d> pose_buf(vs::isomLerp<double>);
   for (const auto& d : pose_data) {
     double ts = d[0];
     Eigen::Isometry3d pose;

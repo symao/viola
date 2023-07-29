@@ -72,7 +72,7 @@ void Rater::sleep() {
   m_timer.start();
 }
 
-FpsCalculator::FpsCalculator(int queue_len) : m_queue(queue_len), m_queue_len(queue_len) {}
+FpsCalculator::FpsCalculator(int queue_len) : m_queue_len(queue_len) {}
 
 void FpsCalculator::start() { m_timer.start(); }
 

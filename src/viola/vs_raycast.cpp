@@ -5,6 +5,7 @@
  * @details
  */
 #include "vs_raycast.h"
+#include <cmath>
 
 namespace vs {
 

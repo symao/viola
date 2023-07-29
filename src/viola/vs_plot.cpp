@@ -208,9 +208,10 @@ static double calcTickStep(double range, double k = 1.6) {
 static std::vector<double> calcTicks(double min, double max, double k) {
   if (max <= min) return {};
   double step = calcTickStep(max - min, k);
-  double x0 = static_cast<int>(min / step) * step;
+  if (std::floor((max - min) / step) < 3) step /= 2;
+  double x0 = std::floor(min / step) * step;
   std::vector<double> ticks;
-  for (double x = x0; x < max; x += step) ticks.push_back(x);
+  for (double x = x0; x < max; x += step) ticks.push_back(fabs(x) < VS_EPS ? 0 : x);
   return ticks;
 }
 

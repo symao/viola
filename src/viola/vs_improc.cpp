@@ -302,7 +302,38 @@ void immergeInPlace(const cv::Mat& img1, cv::Mat& img2, const cv::Mat& alpha1) {
   }
 }
 
+void immergeInPlace(const cv::Mat& img1, cv::Mat& img2, float alpha1) {
+  bool check = img1.size() == img2.size() && img1.type() == img2.type();
+  if (!check) return;
+  if (alpha1 <= 0) {
+    return;
+  } else if (alpha1 >= 1) {
+    img2 = img1;
+    return;
+  }
+  float beta = 1 - alpha1;
+
+  // merge in pixels
+  for (int i = 0; i < img1.rows; i++) {
+    uchar* ptr_res = img2.data + i * img2.step1();
+    const uchar* ptr1 = img1.data + i * img1.step1();
+    for (int j = 0; j < img1.cols; j++) {
+      for (int c = 0; c < img1.channels(); c++, ptr_res++, ptr1++) {
+        uchar v_bg = *ptr_res;
+        uchar v_fg = *ptr1;
+        *ptr_res = clip(v_fg * alpha1 + v_bg * beta, 0, 255);
+      }
+    }
+  }
+}
+
 cv::Mat immerge(const cv::Mat& img1, const cv::Mat& img2, const cv::Mat& alpha1) {
+  cv::Mat res = img2.clone();
+  immergeInPlace(img1, res, alpha1);
+  return res;
+}
+
+cv::Mat immerge(const cv::Mat& img1, const cv::Mat& img2, float alpha1) {
   cv::Mat res = img2.clone();
   immergeInPlace(img1, res, alpha1);
   return res;

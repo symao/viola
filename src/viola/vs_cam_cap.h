@@ -192,7 +192,7 @@ class ExposureControl {
   enum AutoExposureMode { AE_MODE_PID = 0, AE_MODE_DEADZONE };
 
   void exposureAdjust(float cur_bright) {
-    float m_err = m_tar_bright - cur_bright;
+    m_err = m_tar_bright - cur_bright;
 
     // handle state matchine
     switch (m_mode) {

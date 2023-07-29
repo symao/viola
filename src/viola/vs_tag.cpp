@@ -4,7 +4,7 @@
 #include <opencv2/calib3d.hpp>
 #include "vs_basic.h"
 
-#define ENABLE_ARUCO 1
+// #define ENABLE_ARUCO 1
 
 #if ENABLE_ARUCO
 #include <opencv2/aruco.hpp>

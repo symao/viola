@@ -48,6 +48,7 @@
 #include "vs_raycast.h"
 #include "vs_rot.h"
 #include "vs_tictoc.h"
+#include "vs_tqdm.h"
 #include "vs_tracking.h"
 #include "vs_triangulate.h"
 #include "vs_video_saver.h"

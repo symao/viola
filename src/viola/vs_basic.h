@@ -769,6 +769,13 @@ std::vector<T> vecArange(T stop) {
   return vecArange<T>(0, stop);
 }
 
+template <class T>
+std::vector<T> range(T start, T stop, T step = 1) {
+  return vecArange(start, stop, step);
+}
+
+inline std::vector<int> range(int stop) { return vecArange<int>(0, stop, 1); }
+
 /** @brief generate vector with N datas range from start to stop */
 template <class T>
 std::vector<T> vecLinspace(T start, T stop, int N) {
@@ -1176,6 +1183,13 @@ inline void splitext(const std::string& file, std::string& filename, std::string
   }
 }
 
+/** @brief split path to name and suffix */
+inline std::vector<std::string> splitext(const std::string& file) {
+  std::string filename, suffix;
+  splitext(file, filename, suffix);
+  return {filename, suffix};
+}
+
 /** @brief base name. eg: /a/b/c/d/ef.gh => ef.gh */
 inline std::string basename(const char* path) {
   std::string a, b;
@@ -1187,6 +1201,13 @@ inline std::string basename(const char* path) {
 inline std::string dirname(const char* path) {
   std::string a, b;
   split(std::string(path), a, b);
+  return a;
+}
+
+/** @brief get filename of path */
+inline std::string filename(const char* path) {
+  std::string a, b;
+  splitext(std::string(path), a, b);
   return a;
 }
 
